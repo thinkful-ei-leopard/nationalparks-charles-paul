@@ -15,15 +15,19 @@ function displayResults(responseJson) {
   console.log(responseJson);
   $('#results-list').empty();
   // iterate through the items array
-  for (let i = 0; i < responseJson.items.length; i++){
+  for (let i = 0; i < responseJson.data.length; i++){
     // for each video object in the items 
     //array, add a list item to the results 
     //list with the video title, description,
     //and thumbnail
     $('#results-list').append(
-      `<li><h3>${responseJson.items[i].snippet.title}</h3>
-      <p>${responseJson.items[i].snippet.description}</p>
-      <img src='${responseJson.items[i].snippet.thumbnails.default.url}'>
+      `<li><h3>${responseJson.data[i].fullName}</h3>
+      <p>${responseJson.data[i].description}</p>
+      <a href="${responseJson.data[i].url}">${responseJson.data[i].fullName}</a>
+      <address>${responseJson.data[i].addresses[0].line1}
+      ${responseJson.data[i].addresses[0].city}
+      ${responseJson.data[i].addresses[0].stateCode}
+      ${responseJson.data[i].addresses[0].postalCode}</address>
       </li>`
     );}
   //display the results section  
@@ -36,6 +40,7 @@ function getStateParks(query, limit=10, stateAbv) {
     q: query,
     stateCode: stateAbv,  
     limit,
+    fields: ['addresses']
   };
   const queryString = formatQueryParams(params);
   const url = searchURL + '?' + queryString;
